@@ -1,0 +1,54 @@
+plugins {
+    alias(libs.plugins.android.application) // Utilisation des alias du catalogue de versions
+    alias(libs.plugins.kotlin.android)      // Utilisation des alias du catalogue de versions
+}
+
+android {
+    namespace = "com.votrenomdepaquage.randotos" // **IMPORTANT : Remplacez par votre vrai namespace**
+    compileSdk = 34 // Ou la version SDK que vous ciblez
+
+    defaultConfig {
+        applicationId = "com.votrenomdepaquage.randotos" // **IMPORTANT : Remplacez**
+        minSdk = 24 // Ou la version minimale que vous supportez
+        targetSdk = 34 // Ou la version cible
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    // Si vous utilisez des fonctionnalités de build spécifiques comme ViewBinding ou DataBinding
+    // buildFeatures {
+    //     viewBinding = true
+    // }
+}
+
+dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    // implementation(libs.androidx.constraintlayout) // Si vous l'utilisez
+    // implementation(libs.androidx.activity)      // Si vous l'utilisez
+    // implementation(libs.androidx.navigation.fragment.ktx) // Si vous utilisez Navigation Component
+    // implementation(libs.androidx.navigation.ui.ktx)      // Si vous utilisez Navigation Component
+
+    implementation 'org.osmdroid:osmdroid-android:6.1.16' // Votre dépendance
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+}
+    
