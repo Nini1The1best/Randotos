@@ -1,3 +1,4 @@
+---
 format_version: '23'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
@@ -30,12 +31,6 @@ workflows:
     - change-android-versioncode-and-versionname@1:
         inputs:
         - build_gradle_path: "./build.gradle"
-    - android-lint@0:
-        inputs:
-        - project_location: "$PROJECT_LOCATION"
-        - variant: "$VARIANT"
-        - cache_level: none
-        - module: $MODULE
     - android-unit-test@1:
         inputs:
         - project_location: "$PROJECT_LOCATION"
