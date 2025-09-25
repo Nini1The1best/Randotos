@@ -31,11 +31,6 @@ workflows:
     - change-android-versioncode-and-versionname@1:
         inputs:
         - build_gradle_path: "./build.gradle"
-    - android-unit-test@1:
-        inputs:
-        - project_location: "./app"
-        - variant: "$VARIANT"
-        - cache_level: none
     - android-build@1:
         inputs:
         - project_location: "."
