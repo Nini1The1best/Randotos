@@ -11,13 +11,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.startButton.setOnClickListener {
-            val steps = binding.stepsInput.text.toString().toIntOrNull() ?: 6
-            val amplitude = binding.amplitudeInput.text.toString().toDoubleOrNull() ?: 0.001
-
+            val steps = binding.stepsInput.text.toString().toIntOrNull() ?: 0
+            val amplitude = binding.amplitudeInput.text.toString().toDoubleOrNull() ?: 0.0
             // Passe les paramètres à MapActivity
             val intent = Intent(this, MapActivity::class.java)
             intent.putExtra("steps", steps)
