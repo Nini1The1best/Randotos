@@ -33,7 +33,7 @@ workflows:
         - build_gradle_path: "./build.gradle"
     - android-unit-test@1:
         inputs:
-        - project_location: "$PROJECT_LOCATION"
+        - project_location: "./app"
         - variant: "$VARIANT"
         - cache_level: none
     - android-build@1:
