@@ -79,7 +79,7 @@ workflows:
     - restore-gradle-cache@2: {}
     - install-missing-android-tools@3:
         inputs:
-        - gradlew_path: $PROJECT_LOCATION/gradlew
+        - gradlew_path: ./gradlew
     - save-gradle-cache@1: {}
     - deploy-to-bitrise-io@2: {}
     triggers:
