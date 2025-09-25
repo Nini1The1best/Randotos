@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.votrenomdepaquage.randotos" // **IMPORTANT : Remplacez par votre vrai namespace**
+    namespace = "com.vatixdev.randotos" // **IMPORTANT : Remplacez par votre vrai namespace**
     compileSdk = 34 // Ou la version SDK que vous ciblez
 
     defaultConfig {
@@ -32,6 +32,7 @@ android {
     }
      buildFeatures {
          viewBinding = true
+         dataBinding = false
      }
 }
 
