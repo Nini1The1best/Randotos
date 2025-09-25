@@ -4,7 +4,7 @@ project_type: android
 app:
   envs:
   - TEST_SHARD_COUNT: 2
-  - PROJECT_LOCATION: ./app
+  - PROJECT_LOCATION: ./
     opts:
       is_expand: false
   - MODULE: app
@@ -26,10 +26,10 @@ workflows:
     - git-clone@8: {}
     - install-missing-android-tools@3:
         inputs:
-        - gradlew_path: $PROJECT_LOCATION/gradlew
+        - gradlew_path : ./gradlew
     - change-android-versioncode-and-versionname@1:
         inputs:
-        - build_gradle_path: $PROJECT_LOCATION/$MODULE/build.gradle
+        - build_gradle_path: ./build.gradle
     - android-lint@0:
         inputs:
         - project_location: $PROJECT_LOCATION
@@ -59,7 +59,7 @@ workflows:
     - restore-gradle-cache@2: {}
     - install-missing-android-tools@3:
         inputs:
-        - gradlew_path: $PROJECT_LOCATION/gradlew
+        - gradlew_path: ./gradlew
     - avd-manager@2: {}
     - wait-for-android-emulator@1: {}
     - gradle-runner@4:
