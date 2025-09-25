@@ -8,7 +8,7 @@ android {
     compileSdk = 34 // Ou la version SDK que vous ciblez
 
     defaultConfig {
-        applicationId = "com.votrenomdepaquage.randotos" // **IMPORTANT : Remplacez**
+        applicationId = "com.vatixdev.randotos" // **IMPORTANT : Remplacez**
         minSdk = 24 // Ou la version minimale que vous supportez
         targetSdk = 34 // Ou la version cible
         versionCode = 1
@@ -30,10 +30,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    // Si vous utilisez des fonctionnalités de build spécifiques comme ViewBinding ou DataBinding
-    // buildFeatures {
-    //     viewBinding = true
-    // }
+     buildFeatures {
+         viewBinding = true
+     }
 }
 
 dependencies {
