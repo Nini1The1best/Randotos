@@ -1,16 +1,16 @@
 plugins {
-    alias(libs.plugins.android.application) // Utilisation des alias du catalogue de versions
-    alias(libs.plugins.kotlin.android)      // Utilisation des alias du catalogue de versions
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.vatixdev.randotos" // **IMPORTANT : Remplacez par votre vrai namespace**
-    compileSdk = 34 // Ou la version SDK que vous ciblez
+    namespace = "com.vatixdev.randotos"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.vatixdev.randotos" // **IMPORTANT : Remplacez**
-        minSdk = 24 // Ou la version minimale que vous supportez
-        targetSdk = 34 // Ou la version cible
+        applicationId = "com.vatixdev.randotos"
+        minSdk = 24
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -19,38 +19,34 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
-     buildFeatures {
-         viewBinding true
-         dataBinding false
-     }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = false
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    // implementation(libs.androidx.constraintlayout) // Si vous l'utilisez
-    // implementation(libs.androidx.activity)      // Si vous l'utilisez
-    // implementation(libs.androidx.navigation.fragment.ktx) // Si vous utilisez Navigation Component
-    // implementation(libs.androidx.navigation.ui.ktx)      // Si vous utilisez Navigation Component
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
-    implementation 'org.osmdroid:osmdroid-android:6.1.16' // Votre dépendance
-
-implementation "com.google.android.gms:play-services-location:21.3.0"
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
-    
+
