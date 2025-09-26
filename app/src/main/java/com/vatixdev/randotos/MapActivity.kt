@@ -1,65 +1,12 @@
-package com.vatixdev.randotos
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Polyline
-import com.google.android.gms.location.LocationServices
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-class MapActivity : AppCompatActivity() {
-
-    private lateinit var map: MapView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Configuration.getInstance().load(this, getSharedPreferences("osmdroid", MODE_PRIVATE))
-        setContentView(R.layout.activity_map)
-
-        map = findViewById(R.id.mapView)
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setMultiTouchControls(true)
-
-        // Vérifie permission GPS
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 
-                1
-            )
-            return
-        }
-
-        // ✅ Une seule fois le bloc localisation
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            location?.let {
-                val start = GeoPoint(it.latitude, it.longitude)
-                map.controller.setZoom(15.0)
-                map.controller.setCenter(start)
-
-                // Récupère amplitude et steps envoyés par MainActivity
-                val steps = intent.getIntExtra("steps", 6)
-                val amplitude = intent.getDoubleExtra("amplitude", 0.0)
-
-                // Génère un chemin avec steps + amplitude
-                val path = PathGenerator.generatePath(start, steps, amplitude)
-
-                val polyline = Polyline()
-                polyline.setPoints(path)
-                map.overlays.add(polyline)
-                map.invalidate()
-            }
-        }
-    }
-}
+</FrameLayout>
