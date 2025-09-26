@@ -3,6 +3,7 @@ package com.randotos.app
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.location.LocationServices
 import com.randotos.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
