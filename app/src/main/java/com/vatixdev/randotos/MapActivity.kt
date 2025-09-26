@@ -32,48 +32,34 @@ class MapActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 
+                1
+            )
             return
         }
 
-val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-    location?.let {
-        val start = GeoPoint(it.latitude, it.longitude)
-        map.controller.setZoom(15.0)
-        map.controller.setCenter(start)
+        // ✅ Une seule fois le bloc localisation
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                val start = GeoPoint(it.latitude, it.longitude)
+                map.controller.setZoom(15.0)
+                map.controller.setCenter(start)
 
-        // Récupère amplitude et steps envoyés par MainActivity
-        val steps = intent.getIntExtra("steps", 6)
-        val amplitude = intent.getDoubleExtra("amplitude", 0.0)
+                // Récupère amplitude et steps envoyés par MainActivity
+                val steps = intent.getIntExtra("steps", 6)
+                val amplitude = intent.getDoubleExtra("amplitude", 0.0)
 
-        // Génère un chemin avec steps + amplitude
-        val path = PathGenerator.generatePath(start, steps, amplitude)
+                // Génère un chemin avec steps + amplitude
+                val path = PathGenerator.generatePath(start, steps, amplitude)
 
-        val polyline = Polyline()
-        polyline.setPoints(path)
-        map.overlays.add(polyline)
-        map.invalidate()
-// ...
-// Récupère localisation
-val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-    location?.let {
-        val start = GeoPoint(it.latitude, it.longitude)
-        map.controller.setZoom(15.0)
-        map.controller.setCenter(start)
-
-        // Récupère amplitude et steps envoyés par MainActivity
-        val steps = intent.getIntExtra("steps", 6)
-        val amplitude = intent.getDoubleExtra("amplitude", 0.0)
-
-        // Génère un chemin avec steps + amplitude
-        val path = PathGenerator.generatePath(start, steps, amplitude)
-
-        val polyline = Polyline()
-        polyline.setPoints(path)
-        map.overlays.add(polyline)
-        map.invalidate()
+                val polyline = Polyline()
+                polyline.setPoints(path)
+                map.overlays.add(polyline)
+                map.invalidate()
+            }
+        }
     }
 }
