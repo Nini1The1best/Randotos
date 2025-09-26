@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application) // Correct, basé sur votre TOML
-    alias(libs.plugins.kotlin.android)      // MODIFIÉ: correspond à "kotlin-android" dans votre TOML
+    alias(libs.plugins.android.application) // 
+    alias(libs.plugins.kotlin.android)      // 
 }
 
 
