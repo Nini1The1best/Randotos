@@ -19,13 +19,10 @@ class MainActivity : AppCompatActivity() {
             val steps = binding.stepsInput.text.toString().toIntOrNull() ?: 0
             val amplitude = binding.amplitudeInput.text.toString().toDoubleOrNull() ?: 0.0
 
-            // Crée l'intent et passe les paramètres
             val intent = Intent(this, MapActivity::class.java).apply {
                 putExtra("steps", steps)
                 putExtra("amplitude", amplitude)
             }
-
-            // Lance l'activité
             startActivity(intent)
         }
     }
