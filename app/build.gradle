@@ -4,15 +4,14 @@ plugins {
 }
 
 android {
-    namespace = "com.vatixdev.randotos"
-    compileSdk = 34
-
+    namespace "com.vatixdev.randotos"
+    compileSdk 34
     defaultConfig {
-        applicationId = "com.vatixdev.randotos"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId "com.vatixdev.randotos"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
