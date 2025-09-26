@@ -1,4 +1,4 @@
-package com.randotos.app
+package com.vatixdev.randotos
 
 import org.osmdroid.util.GeoPoint
 import kotlin.random.Random
