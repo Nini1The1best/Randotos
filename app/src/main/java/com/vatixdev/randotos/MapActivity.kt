@@ -37,22 +37,43 @@ class MapActivity : AppCompatActivity() {
             return
         }
 
-        // Récupère localisation
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            location?.let {
-                val start = GeoPoint(it.latitude, it.longitude)
-                map.controller.setZoom(15.0)
-                map.controller.setCenter(start)
+val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+    location?.let {
+        val start = GeoPoint(it.latitude, it.longitude)
+        map.controller.setZoom(15.0)
+        map.controller.setCenter(start)
 
-                // Génère un chemin
-                val path = PathGenerator.generatePath(start, 6)
+        // Récupère amplitude et steps envoyés par MainActivity
+        val steps = intent.getIntExtra("steps", 6)
+        val amplitude = intent.getDoubleExtra("amplitude", 0.0)
 
-                val polyline = Polyline()
-                polyline.setPoints(path)
-                map.overlays.add(polyline)
-                map.invalidate()
-            }
-        }
+        // Génère un chemin avec steps + amplitude
+        val path = PathGenerator.generatePath(start, steps, amplitude)
+
+        val polyline = Polyline()
+        polyline.setPoints(path)
+        map.overlays.add(polyline)
+        map.invalidate()
+// ...
+// Récupère localisation
+val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+    location?.let {
+        val start = GeoPoint(it.latitude, it.longitude)
+        map.controller.setZoom(15.0)
+        map.controller.setCenter(start)
+
+        // Récupère amplitude et steps envoyés par MainActivity
+        val steps = intent.getIntExtra("steps", 6)
+        val amplitude = intent.getDoubleExtra("amplitude", 0.0)
+
+        // Génère un chemin avec steps + amplitude
+        val path = PathGenerator.generatePath(start, steps, amplitude)
+
+        val polyline = Polyline()
+        polyline.setPoints(path)
+        map.overlays.add(polyline)
+        map.invalidate()
     }
 }
