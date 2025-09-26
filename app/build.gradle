@@ -31,8 +31,8 @@ android {
         jvmTarget = "1.8"
     }
      buildFeatures {
-         viewBinding = true
-         dataBinding = false
+         viewBinding true
+         dataBinding false
      }
 }
 
@@ -46,6 +46,8 @@ dependencies {
     // implementation(libs.androidx.navigation.ui.ktx)      // Si vous utilisez Navigation Component
 
     implementation 'org.osmdroid:osmdroid-android:6.1.16' // Votre dépendance
+
+implementation "com.google.android.gms:play-services-location:21.3.0"
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
