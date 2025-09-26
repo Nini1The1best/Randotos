@@ -18,6 +18,11 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.setOnClickListener {
             val steps = binding.stepsInput.text.toString().toIntOrNull() ?: 0
             val amplitude = binding.amplitudeInput.text.toString().toDoubleOrNull() ?: 0.0
+
+            val intent = Intent(this, MapActivity::class.java).apply {
+                putExtra("steps", steps)
+                putExtra("amplitude", amplitude)
+
             // Passe les paramètres à MapActivity
             val intent = Intent(this, MapActivity::class.java)
             intent.putExtra("steps", steps)
