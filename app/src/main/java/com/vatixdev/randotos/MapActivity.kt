@@ -1,4 +1,4 @@
-package com.randotos.app
+package com.vatixdev.randotos
 
 import android.Manifest
 import android.content.pm.PackageManager
