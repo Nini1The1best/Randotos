@@ -1,19 +1,21 @@
 package com.vatixdev.randotos
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
-import android.widget.Toast
+import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
-import com.google.android.gms.location.*
+import org.osmdroid.views.overlay.MyLocationNewOverlay
+import java.io.File
 
 class MapActivity : AppCompatActivity() {
 
