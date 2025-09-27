@@ -14,7 +14,7 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.MyLocationNewOverlay
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.File
 
 class MapActivity : AppCompatActivity() {
