@@ -7,82 +7,135 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationServices
+import androidx.core.content.ContextCompat
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.Marker
+import com.google.android.gms.location.*
 
 class MapActivity : AppCompatActivity() {
 
-    private lateinit var map: MapView
-    private val LOCATION_PERMISSION_REQUEST = 1
+    private lateinit var mapView: MapView
+    private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var locationMarker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Configuration.getInstance().load(this, getSharedPreferences("osmdroid", MODE_PRIVATE))
+
+        // ⚠ Initialisation OSMDroid
+        Configuration.getInstance().load(
+            applicationContext,
+            getSharedPreferences("osmdroid", MODE_PRIVATE)
+        )
+
         setContentView(R.layout.activity_map)
 
-        map = findViewById(R.id.mapView)
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setMultiTouchControls(true)
+        mapView = findViewById(R.id.mapView)
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setMultiTouchControls(true)
 
-        // Vérifie permission GPS
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        requestPermissionsIfNecessary()
+    }
+
+    private fun requestPermissionsIfNecessary() {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        val permissionsToRequest = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST
+                permissionsToRequest.toTypedArray(),
+                REQUEST_PERMISSIONS_REQUEST_CODE
             )
         } else {
-            startMap()
+            startLocationUpdates()
         }
     }
 
-    // Gestion de la réponse à la demande de permission
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                startMap()
-            } else {
-                Toast.makeText(this, "Permission GPS refusée", Toast.LENGTH_LONG).show()
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            var allGranted = true
+            grantResults.forEachIndexed { index, result ->
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(
+                        this,
+                        "Permission ${permissions[index]} non accordée",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    allGranted = false
+                }
             }
+            if (allGranted) startLocationUpdates()
         }
     }
 
-    private fun startMap() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location == null) {
-                Toast.makeText(this, "Impossible de récupérer la localisation", Toast.LENGTH_LONG).show()
-                return@addOnSuccessListener
-            }
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
+            .setMinUpdateDistanceMeters(1f)
+            .build()
 
-            val start = GeoPoint(location.latitude, location.longitude)
-            map.controller.setZoom(15.0)
-            map.controller.setCenter(start)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
 
-            // Récupère steps et amplitude
-            val steps = intent.getIntExtra("steps", 6).coerceAtLeast(1)
-            val amplitude = intent.getDoubleExtra("amplitude", 0.001).coerceAtLeast(0.001)
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            object : LocationCallback() {
+                override fun onLocationResult(result: LocationResult) {
+                    result.locations.lastOrNull()?.let { location ->
+                        updateLocationOnMap(location)
+                    }
+                }
+            },
+            mainLooper
+        )
+    }
 
-            // Génère un chemin
-            val path = PathGenerator.generatePath(start, steps, amplitude)
-
-            val polyline = Polyline()
-            polyline.setPoints(path)
-            map.overlays.add(polyline)
-            map.invalidate()
+    private fun updateLocationOnMap(location: Location) {
+        val geoPoint = GeoPoint(location.latitude, location.longitude)
+        if (locationMarker == null) {
+            locationMarker = Marker(mapView)
+            locationMarker!!.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            locationMarker!!.title = "Vous êtes ici"
+            mapView.overlays.add(locationMarker)
         }
+        locationMarker!!.position = geoPoint
+        mapView.controller.setZoom(17.0)
+        mapView.controller.setCenter(geoPoint)
+        mapView.invalidate()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
     }
 }
