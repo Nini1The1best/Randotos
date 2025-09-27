@@ -35,8 +35,8 @@ workflows:
         inputs:
         - project_location: "."
         - module: app
-        - variant: Debug
         - gradlew_path: "./gradlew"
+        - variant: myflavorRelease
     - sign-apk@2:
         run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
     - deploy-to-bitrise-io@2: {}
